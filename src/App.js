@@ -56,11 +56,26 @@ class App extends Component {
     }));
   };
 
+  componentDidMount() {
+    const contactsLocal = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contactsLocal);
+
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   render() {
     const { filter } = this.state;
     const { inputSearchChange, deleteContact, formSubmitHandle } = this;
-
     const visibleContacts = this.inputContactSearch();
+
     return (
       <div className="App">
         <h1>Phonebook</h1>
